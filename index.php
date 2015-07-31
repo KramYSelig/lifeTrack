@@ -6,7 +6,7 @@
 <head>
   <title>Exercise and Diet Tracker - By Mark Giles</title>
   <link rel="stylesheet" href="css/main.css">
-  <script src="js/main.js"></script>
+  
 </head>
 <html>
 <body>
@@ -18,40 +18,29 @@
     <h3>By Mark Giles</h3>
   </header>
   <section id="addStuff">
-    <form>
-      <h2>Add A Person</h2>
-      <label for="pUsername">Username
-        <input type="text" id="pUsername" name="pUsername">
-      </label>
-      <label for="pPassword">Password
-        <input type="password" id="pPassword" name="pPassword">
-      </label>
-      <label for="pEmail">Email Address
-        <input type="email" id="pEmail" name="pEmail">
-      </label>
-      <label for="pFName">First Name
-        <input type="text" id="pFName" name="pFName">
-      </label>
-      <label for="pLName">Last Name
-        <input type="text" id="pLName" name="pLName">
-      </label>
-      <label for="pAge">Age
-        <input type="number" id="pAge" name="pAge">
-      </label>
-      <label for="pWeight">Weight
-        <input type="number" id="pWeight" name="pWeight">
-      </label>
-      <input type="hidden" id="table" name="table" value="people">
-      <input type="hidden" id="action" name="action" value="add">
-      <a href="javascript: add(this)">Add A Person</a>
-    </form>
+    <h2>add stuff</h2>
+    <h3>which table?</h3>
+    <select name="selectForm" id="selectForm" onchange="buildAddForm(this.value)">
+      <option>people</option>
+      <option>locations</option>
+      <option>exercises</option>
+      <option>foodItems</option>
+      <option>exerciseLogRecords</option>
+      <option>foodLogRecords</option>
+      <option>favoritePeopleFoodItems</option>
+      <option>favoritePeopleExercises</option>
+    </select>
+    <div name="addForm" id="addForm">
+      
+    
+    </div>
   </section>
   
   <section id="showStuff">
     <section id="people">
       <table>
         <caption>
-          <h2>Table: People</h2>
+          <h2>people</h2>
         </caption>
         <thead>
           <tr>
@@ -78,7 +67,7 @@
     <section id="locations">
       <table>
         <caption>
-          <h2>Table: Locations</h2>
+          <h2>locations</h2>
         </caption>
         <thead>
           <tr>
@@ -95,7 +84,8 @@
             <th>Creator ID</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="locationstbody">
+          
         </tbody>
         <tfoot>
 
@@ -106,7 +96,7 @@
     <section id="exercises">
       <table>
         <caption>
-          <h2>Table: Exercises</h2>
+          <h2>exercises</h2>
         </caption>
         <thead>
           <tr>
@@ -118,7 +108,7 @@
             <th>Creator ID</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="exercisestbody">
         </tbody>
         <tfoot>
 
@@ -129,7 +119,7 @@
     <section id="foodItems">
       <table>
         <caption>
-          <h2>Table: Food Items</h2>
+          <h2>foodItems</h2>
         </caption>
         <thead>
           <tr>
@@ -146,7 +136,7 @@
             <th>Creator ID</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="foodItemstbody">
         </tbody>
         <tfoot>
 
@@ -157,7 +147,7 @@
     <section id="exerciseLogRecords">
       <table>
         <caption>
-          <h2>Table: Exercise Log Records</h2>
+          <h2>exerciseLogRecords</h2>
         </caption>
         <thead>
           <tr>
@@ -174,7 +164,7 @@
             <th>Notes</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="exerciseLogRecordstbody">
         </tbody>
         <tfoot>
 
@@ -185,7 +175,7 @@
     <section id="foodLogRecords">
       <table>
         <caption>
-          <h2>Table: Food Log Records</h2>
+          <h2>foodLogRecords</h2>
         </caption>
         <thead>
           <tr>
@@ -198,7 +188,7 @@
             <th>Notes</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="foodLogRecordstbody">
         </tbody>
         <tfoot>
 
@@ -209,7 +199,7 @@
     <section id="favoritePeopleExercises">
       <table>
         <caption>
-          <h2>Table: Favorite People/Exercises</h2>
+          <h2>favoritePeopleExercises</h2>
         </caption>
         <thead>
           <tr>
@@ -217,7 +207,7 @@
             <th>Exercise ID</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="favoritePeopleExercisestbody">
         </tbody>
         <tfoot>
 
@@ -228,7 +218,7 @@
     <section id="favoritePeopleFoodItems">
       <table>
         <caption>
-          <h2>Table: Favorite People/Food Items</h2>
+          <h2>favoritePeopleFoodItems</h2>
         </caption>
         <thead>
           <tr>
@@ -236,7 +226,7 @@
             <th>Food ID</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="favoritePeopleFoodItemstbody">
         </tbody>
         <tfoot>
 
@@ -245,4 +235,5 @@
     </section>
   </section>
 </body>
+<script src="js/main.js"></script>
 </html>

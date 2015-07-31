@@ -9,22 +9,77 @@ function add(form) {
     url = 'PHPdbFiles/db.php';
   
   reqParam = 'action=' + form.action.value;
-  reqParam += '&username=' + form.pUsername.value;
-  reqParam += '&password=' + form.pPassword.value;
-  reqParam += '&email=' + form.pEmail.value;
-  reqParam += '&fName=' + form.pFName.value;
-  reqParam += '&lName=' + form.pLName.value;
-  reqParam += '&age=' + form.pAge.value;
-  reqParam += '&weight=' + form.pWeight.value;
   reqParam += '&table=' + form.table.value;
-
+  
+  
+  if (form.table.value === 'people') {
+    reqParam += '&username=' + form.username.value;
+    reqParam += '&password=' + form.password.value;
+    reqParam += '&email=' + form.email.value;
+    reqParam += '&fName=' + form.fName.value;
+    reqParam += '&lName=' + form.lName.value;
+    reqParam += '&age=' + form.age.value;
+    reqParam += '&weight=' + form.weight.value;
+  }
+  if (form.table.value === 'locations' || form.table.value === 'exercises' || form.table.value === 'foodItems') {
+    reqParam += '&entityName=' + form.entityName.value;
+    reqParam += '&description=' + form.description.value;
+    reqParam += '&category=' + form.category.value;
+    reqParam += '&creatorID=' + form.creatorID.value;
+  }
+  if (form.table.value === 'locations') {
+    reqParam += '&phone=' + form.phone.value;
+    reqParam += '&addressLine1=' + form.addressLine1.value;
+    reqParam += '&addressLine2=' + form.addressLine2.value;
+    reqParam += '&city=' + form.city.value;
+    reqParam += '&state=' + form.state.value;
+    reqParam += '&postalCode=' + form.postalCode.value;  
+  }
+  if (form.table.value === 'exercises') {
+    reqParam += '&muscleGroup=' + form.muscleGroup.value;  
+  }
+  if (form.table.value === 'foodItems') {
+    reqParam += '&sugar=' + form.sugar.value;
+    reqParam += '&carbohydrate=' + form.carbohydrate.value;
+    reqParam += '&protein=' + form.protein.value;
+    reqParam += '&fat=' + form.fat.value;
+    reqParam += '&calorie=' + form.calorie.value;
+    reqParam += '&unit=' + form.unit.value;  
+  }
+  if (form.table.value === 'exerciseLogRecords' || form.table.value === 'foodLogRecords' || form.table.value === 'favoritePeopleExercises' || form.table.value === 'favoritePeopleFoodItems') {
+    reqParam += '&personID=' + form.personID.value;
+  }
+  if (form.table.value === 'exerciseLogRecords' || form.table.value === 'foodLogRecords') {
+    reqParam += '&locationID=' + form.locationID.value;
+    reqParam += '&notes=' + form.notes.value;
+    reqParam += '&dateTimeSubmitted=' + form.dateTimeSubmitted.value;
+  }
+  if (form.table.value === 'exerciseLogRecords' || form.table.value === 'favoritePeopleExercises') {
+    reqParam += '&exerciseID=' + form.exerciseID.value;
+  }
+  if (form.table.value === 'exerciseLogRecords') {
+    reqParam += '&dateTimePerformed=' + form.dateTimePerformed.value;
+    reqParam += '&duration=' + form.duration.value;
+    reqParam += '&distance=' + form.distance.value;
+    reqParam += '&speed=' + form.speed.value;
+    reqParam += '&repetitions=' + form.repetitions.value;
+    reqParam += '&weight=' + form.weight.value;
+  }
+  if (form.table.value === 'foodLogRecords' || form.table.value === 'favoritePeopleFoodItems') {
+    reqParam += '&foodID=' + form.foodID.value;  
+  }
+  if (form.table.value === 'foodLogRecords') {
+    reqParam += '&dateTimeConsumed=' + form.dateTimeConsumed.value;
+    reqParam += '&quantity=' + form.quantity.value;  
+  }
+  
   req.onreadystatechange = function () {
-    if (this.readyState === 4) {
-      console.log(this.responseText);
+    if (this.readyState === 4)
+    {
+      loadTables();
     }
   };
-  
-  console.log(reqParam);
+
   req.open('POST', url, true);
   req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   req.send(reqParam);
@@ -44,7 +99,8 @@ function load(table) {
   reqParam += '&table=' + table;
 
   req.onreadystatechange = function () {
-    if (this.readyState === 4) {
+    if (this.readyState === 4) 
+    {
       document.getElementById(table + 'tbody').innerHTML = this.responseText;
     }
   };
@@ -54,4 +110,101 @@ function load(table) {
   req.send(reqParam);
 }
 
-window.onload = load('people');
+/******************************************************************************
+ * Function Name: buildAddForm(formName)
+ *
+ *
+ *****************************************************************************/
+function buildAddForm(formName) {
+  var formString = "<form>";
+
+  if (formName === 'people') {
+    formString += "<label for='username'>Username<input type='text' id='username' name='username'></label>";
+    formString += "<label for='password'>Password<input type='password' id='password' name='password'></label>";
+    formString += "<label for='email'>Email Address<input type='email' id='email' name='email'></label>";
+    formString += "<label for='fName'>First Name<input type='text' id='fName' name='fName'></label>";
+    formString += "<label for='lName'>Last Name<input type='text' id='lName' name='lName'></label>";
+    formString += "<label for='age'>Age<input type='number' id='age' name='age'></label>";
+    formString += "<label for='weight'>Weight<input type='number' id='weight' name='weight'></label>";
+  }
+  if (formName === 'locations' || formName === 'exercises' || formName === 'foodItems') {
+    formString += "<label for='entityName'>name<input type='text' id='entityName' name='entityName'></label>";
+    formString += "<label for='description'>description<input type='text' id='description' name='description'></label>";
+    formString += "<label for='creatorID'>creator id<input type='text' id='creatorID' name='creatorID'></label>";
+    if (formName === 'locations') {
+      formString += "<label for='category'>category<input type='text' id='category' name='category'></label>";
+    }
+    else if (formName === 'exercises') {
+      formString += "<label for='category'>category<input type='text' id='category' name='category'></label>";
+    }
+    else if (formName === 'foodItems') {
+      formString += "<label for='category'>category<input type='text' id='category' name='category'></label>";
+    }
+  }
+  if (formName === 'locations') {
+    formString += "<label for='phone'>phone number<input type='text' id='phone' name='phone'></label>";
+    formString += "<label for='addressLine1'>address line 1<input type='text' id='addressLine1' name='addressLine1'></label>";
+    formString += "<label for='addressLine2'>address line 2<input type='text' id='addressLine2' name='addressLine2'></label>";
+    formString += "<label for='city'>city<input type='text' id='city' name='city'></label>";
+    formString += "<label for='state'>state<input type='text' id='state' name='state'></label>";
+    formString += "<label for='postalCode'>zip code<input type='text' id='postalCode' name='postalCode'></label>";
+  }
+  if (formName === 'exercises') {
+    formString += "<label for='muscleGroup'>muscle group<input type='text' id='muscleGroup' name='muscleGroup'></label>";
+  }
+  if (formName === 'foodItems') {
+    formString += "<label for='sugar'>sugar<input type='number' id='sugar' name='sugar'></label>";
+    formString += "<label for='carbohydrate'>carbohydrate<input type='number' id='carbohydrate' name='carbohydrate'></label>";
+    formString += "<label for='protein'>protein<input type='number' id='protein' name='protein'></label>";
+    formString += "<label for='fat'>fat<input type='number' id='fat' name='fat'></label>";
+    formString += "<label for='calorie'>calorie<input type='number' id='calorie' name='calorie'></label>";
+    formString += "<label for='unit'>unit<input type='text' id='unit' name='unit'></label>";
+  }
+  if (formName === 'exerciseLogRecords' || formName === 'foodLogRecords' || formName === 'favoritePeopleExercises' || formName === 'favoritePeopleFoodItems') {
+    formString += "<label for='personID'>personID<input type='number' id='personID' name='personID'></label>";
+  }
+  if (formName === 'exerciseLogRecords' || formName === 'favoritePeopleExercises') {
+    formString += "<label for='exerciseID'>exerciseID<input type='number' id='exerciseID' name='exerciseID'></label>";
+  }
+  if (formName === 'foodLogRecords' || formName === 'favoritePeopleFoodItems') {
+    formString += "<label for='foodID'>foodID<input type='number' id='foodID' name='foodID'></label>";
+  }
+  if (formName === 'exerciseLogRecords' || formName === 'foodLogRecords') {
+    formString += "<label for='locationID'>locationID<input type='number' id='locationID' name='locationID'></label>";
+    formString += "<label for='notes'>notes<input type='text' id='notes' name='notes'></label>";
+    formString += "<label for='dateTimeSubmitted'>Date/Time Submitted<input type='number' id='dateTimeSubmitted' name='dateTimeSubmitted'></label>";
+  }
+  if (formName === 'exerciseLogRecords') {
+    formString += "<label for='dateTimePerformed'>Date/Time Performed<input type='number' id='dateTimePerformed' name='dateTimePerformed'></label>";
+    formString += "<label for='duration'>fat<input type='number' id='duration' name='duration'></label>";
+    formString += "<label for='distance'>distance<input type='number' id='distance' name='distance'></label>";
+    formString += "<label for='speed'>speed<input type='number' id='speed' name='speed'></label>";
+    formString += "<label for='repetitions'>repetitions<input type='number' id='repetitions' name='repetitions'></label>";
+    formString += "<label for='weight'>weight<input type='number' id='weight' name='weight'></label>";
+  }
+  if (formName === 'foodLogRecords') {
+    formString += "<label for='dateTimeConsumed'>Date/Time Consumed<input type='number' id='dateTimeConsumed' name='dateTimeConsumed'></label>";
+    formString += "<label for='quantity'>quantity<input type='number' id='quantity' name='quantity'></label>";
+  }
+
+  formString += "<input type='hidden' id='table' name='table' value='" + formName + "'>";
+  formString += "<input type='hidden' id='action' name='action' value='add'>";
+  formString += "<a href='javascript: add(this)'>add to " + formName + "</a>";
+  formString += "</form>";
+
+  document.getElementById('addForm').innerHTML = formString;
+}
+
+function loadTables() {
+  load('people');
+  load('locations');
+  load('exercises');
+  load('foodItems');
+  load('exerciseLogRecords');
+  load('foodLogRecords');
+  load('favoritePeopleExercises');
+  load('favoritePeopleFoodItems');
+}
+
+window.onload = loadTables();
+window.onload = buildAddForm('people');
