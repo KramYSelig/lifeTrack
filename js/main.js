@@ -163,6 +163,8 @@ function getValues(table, field, idName, errorMessagesID) {
   req.onreadystatechange = function () {
     if (this.readyState === 4) 
     {
+      console.log(idName);
+      console.log(errorMessagesID);
       if (this.responseText.substring(0, 5) === 'ERROR') {
         document.getElementById(idName).innerHTML = "";
         errorLi.appendChild(document.createTextNode(this.responseText));
@@ -171,6 +173,7 @@ function getValues(table, field, idName, errorMessagesID) {
       else {
         document.getElementById(idName).innerHTML = this.responseText;
       }
+      
       selects = document.getElementsByTagName('select');
       for (i = 0; i < selects.length; i++) {
         document.getElementsByTagName('select')[i].removeAttribute('disabled');
@@ -190,6 +193,7 @@ function getValues(table, field, idName, errorMessagesID) {
  *****************************************************************************/
 function buildEditIDSelector(formName) {
   document.getElementById('editMessages').innerHTML = "";
+  document.getElementById('editForm').innerHTML = "";
   getValues(formName, 'id', 'editIDSelector', 'editMessages');
 }
 

@@ -63,16 +63,165 @@ function getRecord($table, $id) {
     $stmt->close();
   }
   else if ($table == 'locations') {
-    
+    if (!$stmt->execute()) {
+      echo "Execute failed: (" . $mysqli->errno . ") " . $mysqli->error;
+    }
+    if (!$stmt->bind_result($id,
+                            $name,
+                            $description,
+                            $phone,
+                            $addressLine1,
+                            $addressLine2,
+                            $city,
+                            $category,
+                            $postalCode,
+                            $state,
+                            $creatorID)) {
+        echo "Binding output parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+    }
+
+    $id = NULL;
+    $name = NULL;
+    $description = NULL;
+    $phone = NULL;
+    $addressLine1 = NULL;
+    $addressLine2 = NULL;
+    $city = NULL;
+    $category = NULL;
+    $postalCode = NULL;
+    $state = NULL;
+    $creatorID = NULL;
+
+    while($stmt->fetch()) {
+      echo '<label for="entityName" class="required">name<input type="text" id="entityName" value="' . $name . '"></label>';
+      echo '<label for="description" class="required">description<input type="text" id="description" value="' . $description . '"></label>';
+      echo '<label for="phone">phone<input type="text" id="phone" value="' . $phone . '"></label>';
+      echo '<label for="addressLine1">address line 1<input type="text" id="addressLine1" value="' . $addressLine1 . '"></label>';
+      echo '<label for="addressLine2"">address line 2<input type="text" id="addressLine2" value="' . $addressLine2 . '"></label>';
+      echo '<label for="city">city<input type="text" id="city" value="' . $city . '"></label>';
+      echo '<label for="category">category<input type="text" id="category" value="' . $category . '"></label>';
+      echo '<label for="postalCode">postalCode<input type="text" id="postalCode" value="' . $postalCode . '"></label>';
+      echo '<label for="state">state<input type="text" id="state" value="' . $state . '"></label>';
+      echo '<label for="creatorID">creatorID<input type="text" id="creatorID" value="' . $creatorID . '"></label>';
+    }
+
+    $stmt->close();
   }
   else if ($table == 'exercises') {
-    
+    if (!$stmt->execute()) {
+      echo "Execute failed: (" . $mysqli->errno . ") " . $mysqli->error;
+    }
+    if (!$stmt->bind_result($id,
+                            $name,
+                            $description,
+                            $muscleGroup,
+                            $category,
+                            $creatorID)) {
+        echo "Binding output parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+    }
+
+    $id = NULL;
+    $name = NULL;
+    $description = NULL;
+    $muscleGroup = NULL;
+    $category = NULL;
+    $creatorID = NULL;
+
+    while($stmt->fetch()) {
+      echo '<label for="entityName" class="required">name<input type="text" id="entityName" value="' . $name . '"></label>';
+      echo '<label for="description" class="required">description<input type="text" id="description" value="' . $description . '"></label>';
+      echo '<label for="muscleGroup">muscle group<input type="text" id="muscleGroup" value="' . $muscleGroup . '"></label>';
+      echo '<label for="category">category<input type="text" id="category" value="' . $category . '"></label>';
+      echo '<label for="creatorID">creatorID<input type="text" id="creatorID" value="' . $creatorID . '"></label>';
+    }
+
+    $stmt->close();
   }
   else if ($table == 'foodItems') {
-    
+    if (!$stmt->execute()) {
+      echo "Execute failed: (" . $mysqli->errno . ") " . $mysqli->error;
+    }
+    if (!$stmt->bind_result($id,
+                            $name,
+                            $description,
+                            $category,
+                            $sugar,
+                            $carbohydrate,
+                            $protein,
+                            $fat,
+                            $calorie,
+                            $unit,
+                            $creatorID)) {
+        echo "Binding output parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+    }
+
+    $id = NULL;
+    $name = NULL;
+    $description = NULL;
+    $category = NULL;
+    $sugar = NULL;
+    $carbohydrate = NULL;
+    $protein = NULL;
+    $fat = NULL;
+    $calorie = NULL;
+    $unit = NULL;
+    $creatorID = NULL;
+
+    while($stmt->fetch()) {
+      echo '<label for="entityName" class="required">name<input type="text" id="entityName" value="' . $name . '"></label>';
+      echo '<label for="description" class="required">description<input type="text" id="description" value="' . $description . '"></label>';
+      echo '<label for="category">category<input type="text" id="category" value="' . $category . '"></label>';
+      echo '<label for="sugar">sugar<input type="text" id="sugar" value="' . $sugar . '"></label>';
+      echo '<label for="carbohydrate">carbohydrate<input type="text" id="carbohydrate" value="' .     $carbohydrate = NULL;
+ . '"></label>';
+      echo '<label for="protein">protein<input type="text" id="protein" value="' . $protein . '"></label>';
+      echo '<label for="fat">fat<input type="text" id="fat" value="' . $fat . '"></label>';
+      echo '<label for="calorie">calorie<input type="text" id="calorie" value="' . $calorie . '"></label>';
+      echo '<label for="unit">unit<input type="text" id="unit" value="' . $unit . '"></label>';
+      echo '<label for="creatorID">creatorID<input type="text" id="creatorID" value="' . $creatorID . '"></label>';
+    }
+
+    $stmt->close();
   }
   else if ($table == 'foodLogRecords') {
+    if (!$stmt->execute()) {
+      echo "Execute failed: (" . $mysqli->errno . ") " . $mysqli->error;
+    }
+    if (!$stmt->bind_result($id,
+                            $personID,
+                            $foodID,
+                            $locationID,
+                            $dateTimeConsumed,
+                            $dateTimeSubmitted,
+                            $quantity,
+                            $notes)) {
+        echo "Binding output parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+    }
+
+    $id = NULL;
+    $personID = NULL;
+    $foodID = NULL;
+    $locationID = NULL;
+    $dateTimeConsumed = NULL;
+    $dateTimeSubmitted = NULL;
+    $quantity = NULL;
+    $notes = NULL;
     
+    while($stmt->fetch()) {
+      echo '<label for="entityName" class="required">name<input type="text" id="entityName" value="' . $personID . '"></label>';
+      echo '<label for="description" class="required">description<input type="text" id="description" value="' . $foodID . '"></label>';
+      echo '<label for="category">category<input type="text" id="category" value="' . $locationID . '"></label>';
+      echo '<label for="sugar">sugar<input type="text" id="sugar" value="' . $sugar . '"></label>';
+      echo '<label for="carbohydrate">carbohydrate<input type="text" id="carbohydrate" value="' .     $carbohydrate = NULL;
+ . '"></label>';
+      echo '<label for="protein">protein<input type="text" id="protein" value="' . $protein . '"></label>';
+      echo '<label for="fat">fat<input type="text" id="fat" value="' . $fat . '"></label>';
+      echo '<label for="calorie">calorie<input type="text" id="calorie" value="' . $calorie . '"></label>';
+      echo '<label for="unit">unit<input type="text" id="unit" value="' . $unit . '"></label>';
+      echo '<label for="creatorID">creatorID<input type="text" id="creatorID" value="' . $creatorID . '"></label>';
+    }
+
+    $stmt->close();
   }
   else if ($table == 'exerciseLogRecords') {
     

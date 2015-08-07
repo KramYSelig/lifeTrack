@@ -39,7 +39,9 @@
     </select>
     <div name="addForm" id="addForm">
     </div>
-    <ul id="addMessages"></ul>
+    <ul id="addMessages">
+    
+    </ul>
   </section>
   <section id="editStuff">
     <h2>edit stuff</h2>
@@ -63,8 +65,10 @@
     </form>
     <form name="editForm" id="editForm">
       
-    </div>
-    <ul id="editMessages"></ul>
+    </form>
+    <ul id="editMessages">
+    
+    </ul>
   </section>
   
   <section id="viewStuff">
