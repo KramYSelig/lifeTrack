@@ -10,10 +10,121 @@ if ($_POST['action']) {
   else if ($_POST['action'] == 'add') {
     add($_POST['table']);
   }
+  else if ($_POST['action'] == 'remove') {
+    remove($_POST['table'], $_POST['id']);
+  }
+  else if ($_POST['action'] == 'getValues') {
+    getValues($_POST['table'], $_POST['field']);
+  }
+  else if ($_POST['action'] == 'getRecord') {
+    getRecord($_POST['table'], $_POST['id']);
+  }
 }
 else {
   // Error ET0001: No action key specified in POST array
   echo 'ET0001';
+}
+
+function getRecord($table, $id) {
+  require 'storedInfo.php';
+  $mysqli = new mysqli($dbHostname, $dbUser, $dbPassword, $dbName);
+  
+  if (!($stmt = $mysqli->prepare("SELECT * FROM $table WHERE id = $id"))) {
+    echo "Prepare failed: (" . $mysqli->erro . ") " . $mysqli->error;
+  }
+  
+  if ($table == 'people') {
+    if (!$stmt->execute()) {
+      echo "Execute failed: (" . $mysqli->errno . ") " . $mysqli->error;
+    }
+    if (!$stmt->bind_result($id, $username, $password, $email, $fName, $lName, $age, $weight)) {
+        echo "Binding output parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+    }
+
+    $id = NULL;
+    $username = NULL;
+    $password = NULL;
+    $email = NULL;
+    $fName = NULL;
+    $lName = NULL;
+    $age = NULL;
+    $weight = NULL;
+
+    while($stmt->fetch()) {
+      echo '<label for="username" class="required">username<input type="text" id="username" value="' . $username . '"></label>';
+      echo '<label for="password" class="required">password<input type="text" id="password" value="' . $password . '"></label>';
+      echo '<label for="email" class="required">email<input type="text" id="email" value="' . $email . '"></label>';
+      echo '<label for="fName" class="required">first name<input type="text" id="fName" value="' . $fName . '"></label>';
+      echo '<label for="lName" class="required">last name<input type="text" id="lName" value="' . $lName . '"></label>';
+      echo '<label for="age" class="required">age<input type="text" id="age" value="' . $age . '"></label>';
+      echo '<label for="weight" class="required">weight<input type="text" id="weight" value="' . $weight . '"></label>';
+    }
+
+    $stmt->close();
+  }
+  else if ($table == 'locations') {
+    
+  }
+  else if ($table == 'exercises') {
+    
+  }
+  else if ($table == 'foodItems') {
+    
+  }
+  else if ($table == 'foodLogRecords') {
+    
+  }
+  else if ($table == 'exerciseLogRecords') {
+    
+  }
+  else if ($table == 'favoritePeopleExercises') {
+    
+  }
+  else if ($table == 'favoritePeopleFoodItems') {
+    
+  }
+}
+
+function getValues($table, $field) {
+  require 'storedInfo.php';
+  $mysqli = new mysqli($dbHostname, $dbUser, $dbPassword, $dbName);
+  $count = 0;
+
+  if (!($stmt = $mysqli->prepare("SELECT DISTINCT $field FROM $table"))) {
+    echo "ERROR: Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+  }
+
+  if (!$stmt->execute()) {
+    echo "ERROR: Execute failed: (" . $mysqli->errno . ") " . $mysqli->error;
+  }
+  if (!$stmt->bind_result($value)) {
+      echo "ERROR: Binding output parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+  }
+
+  $value = NULL;
+
+  while($stmt->fetch()) {
+    echo "<option>" . $value . "</option>";
+    $count++;
+  }
+  if ($count == 0) {
+    echo 'ERROR: No ' . $field . 's to show. Please create an entity in ' . $table . '.';
+  }
+  
+  $stmt->close();
+}
+
+function remove($table, $id) {
+  require 'storedInfo.php';
+  $mysqli = new mysqli($dbHostname, $dbUser, $dbPassword, $dbName);
+
+  if (!($stmt = $mysqli->prepare("DELETE FROM $table WHERE id = $id"))) {
+    echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+  }
+  if (!$stmt->execute()) {
+    echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+  }
+  $stmt->close();
 }
 
 function add($table) {
@@ -23,7 +134,7 @@ function add($table) {
   if(!$mysqli || $mysqli->connect_errno) {
     echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
   }
-
+  
   if ($table == 'people') {
     if (!($stmt = $mysqli->prepare("INSERT INTO people(username,
                                                        password,
@@ -179,8 +290,7 @@ function add($table) {
       echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
     } 
 
-    if (!$stmt->bind_param("ii", $_POST['personID'],
-                                 $_POST['exerciseID'])) {
+    if (!$stmt->bind_param("ii", $_POST['personID'], $_POST['exerciseID'])) {
         echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
     }
   }
@@ -191,8 +301,7 @@ function add($table) {
       echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
     } 
 
-    if (!$stmt->bind_param("ii", $_POST['personID'],
-                                 $_POST['foodID'])) {
+    if (!$stmt->bind_param("ii", $_POST['personID'], $_POST['foodID'])) {
         echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
     }
   }
@@ -203,7 +312,10 @@ function add($table) {
   
   $stmt->close();
 }
-
+/******************************************************************************
+ * Name: load($table)
+ *
+ *****************************************************************************/
 function load($table) {
   require 'storedInfo.php';
   $mysqli = new mysqli($dbHostname, $dbUser, $dbPassword, $dbName);
@@ -245,6 +357,8 @@ function load($table) {
       echo '<td>' . $lName . '</td>';
       echo '<td>' . $age . '</td>';
       echo '<td>' . $weight . '</td>';
+      echo '<td><a href="javascript: remove(' . "'" . $table . "'" . ', ' . $id . ')">Delete Row</a></td>';
+      
       echo '</tr>';
     }
     
@@ -290,6 +404,7 @@ function load($table) {
       echo '<td>' . $postalCode . '</td>';
       echo '<td>' . $state . '</td>';
       echo '<td>' . $creatorID . '</td>';
+      echo '<td><a href="javascript: remove(' . "'" . $table . "'" . ', ' . $id . ')">Delete Row</a></td>';
       echo '</tr>';
     }
     
@@ -320,6 +435,7 @@ function load($table) {
       echo '<td>' . $muscleGroup . '</td>';
       echo '<td>' . $category . '</td>';
       echo '<td>' . $creatorID . '</td>';
+      echo '<td><a href="javascript: remove(' . "'" . $table . "'" . ', ' . $id . ')">Delete Row</a></td>';
       echo '</tr>';
     }
     
@@ -365,13 +481,15 @@ function load($table) {
       echo '<td>' . $calorie . '</td>';
       echo '<td>' . $unit . '</td>';
       echo '<td>' . $creatorID . '</td>';
+      echo '<td><a href="javascript: remove(' . "'" . $table . "'" . ', ' . $id . ')">Delete Row</a></td>';
       echo '</tr>';
     }
     
     $stmt->close();
   }
   else if ($table == 'exerciseLogRecords') {
-    if (!$stmt->bind_result($personID,
+    if (!$stmt->bind_result($id,
+                            $personID,
                             $exerciseID,
                             $locationID,
                             $dateTimePerformed,
@@ -385,6 +503,7 @@ function load($table) {
       echo "Binding output parameters failed: (" . $stmt->errno . ") " . $stmt->error;
     }
     
+    $id = NULL;
     $personID = NULL;
     $exerciseID = NULL;
     $locationID = NULL;
@@ -399,6 +518,7 @@ function load($table) {
     
     while($stmt->fetch()) {
       echo '<tr>';
+      echo '<td>' . $id . '</td>';
       echo '<td>' . $personID . '</td>';
       echo '<td>' . $exerciseID . '</td>';
       echo '<td>' . $locationID . '</td>';
@@ -410,13 +530,15 @@ function load($table) {
       echo '<td>' . $repetitions . '</td>';
       echo '<td>' . $weight . '</td>';
       echo '<td>' . $notes . '</td>';
+      echo '<td><a href="javascript: remove(' . "'" . $table . "'" . ', ' . $id . ')">Delete Row</a></td>';
       echo '</tr>';
     }
     
     $stmt->close();
   }
   else if ($table == 'foodLogRecords') {
-    if (!$stmt->bind_result($personID,
+    if (!$stmt->bind_result($id,
+                            $personID,
                             $foodID,
                             $locationID,
                             $dateTimeConsumed,
@@ -426,6 +548,7 @@ function load($table) {
       echo "Binding output parameters failed: (" . $stmt->errno . ") " . $stmt->error;
     }
     
+    $id = NULL;
     $personID = NULL;
     $foodID = NULL;
     $locationID = NULL;
@@ -436,6 +559,7 @@ function load($table) {
     
     while($stmt->fetch()) {
       echo '<tr>';
+      echo '<td>' . $id . '</td>';
       echo '<td>' . $personID . '</td>';
       echo '<td>' . $foodID . '</td>';
       echo '<td>' . $locationID . '</td>';
@@ -443,42 +567,52 @@ function load($table) {
       echo '<td>' . $dateTimeSubmitted . '</td>';
       echo '<td>' . $quantity . '</td>';
       echo '<td>' . $notes . '</td>';
+      echo '<td><a href="javascript: remove(' . "'" . $table . "'" . ', ' . $id . ')">Delete Row</a></td>';
       echo '</tr>';
     }
     
     $stmt->close();
   }
   else if ($table == 'favoritePeopleExercises') {
-    if (!$stmt->bind_result($personID,
+    if (!$stmt->bind_result($id,
+                            $personID,
                             $exerciseID)) {
       echo "Binding output parameters failed: (" . $stmt->errno . ") " . $stmt->error;
     }
     
+    $id = NULL;
     $personID = NULL;
     $exerciseID = NULL;
     
     while($stmt->fetch()) {
       echo '<tr>';
+      echo '<td>' . $id . '</td>';
       echo '<td>' . $personID . '</td>';
       echo '<td>' . $exerciseID . '</td>';
+      echo '<td><a href="javascript: remove(' . "'" . $table . "'" . ', ' . $id . ')">Delete Row</a></td>';
       echo '</tr>';
     }
     
     $stmt->close();
   }
   else if ($table == 'favoritePeopleFoodItems') {
-    if (!$stmt->bind_result($personID,
+    if (!$stmt->bind_result($id,
+                            $personID,
                             $foodID)) {
       echo "Binding output parameters failed: (" . $stmt->errno . ") " . $stmt->error;
     }
     
+    $id = NULL;
     $personID = NULL;
     $foodID = NULL;
     
     while($stmt->fetch()) {
       echo '<tr>';
+      echo '<td>' . $id . '</td>';
       echo '<td>' . $personID . '</td>';
       echo '<td>' . $foodID . '</td>';
+      echo '<td><a href=';
+      echo '<td><a href="javascript: remove(' . "'" . $table . "'" . ', ' . $id . ')">Delete Row</a></td>';
       echo '</tr>';
     }
     

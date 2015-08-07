@@ -3,6 +3,34 @@ td, th {
   min-width: 100px;
 }
 
-section {
-  border: 1px solid black;
+caption {
+  text-align: left;
+}
+
+header {
+  background-color: darkolivegreen;
+}
+
+#userGuide {
+  background-color: tomato;
+}
+
+#addStuff {
+  background-color: antiquewhite;
+}
+
+#viewStuff {
+  background-color: aquamarine;
+}
+
+#editStuff {
+  background-color: cadetblue;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible;
 }

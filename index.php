@@ -15,11 +15,18 @@
     
     </div>
     <h1>Exercise and Diet Tracker</h1>
-    <h3>By Mark Giles</h3>
+    <h2>By Mark Giles</h2>
   </header>
+  
+  <section id="userGuide">
+    <h2>user guide</h2>
+    <h4>basic info for using the forms and tables below</h4>
+  </section>
+  
   <section id="addStuff">
     <h2>add stuff</h2>
-    <h3>which table?</h3>
+    <h4>which table?</h4>
+    
     <select name="selectForm" id="selectForm" onchange="buildAddForm(this.value)">
       <option>people</option>
       <option>locations</option>
@@ -31,16 +38,41 @@
       <option>favoritePeopleExercises</option>
     </select>
     <div name="addForm" id="addForm">
-      
-    
     </div>
+    <ul id="addMessages"></ul>
+  </section>
+  <section id="editStuff">
+    <h2>edit stuff</h2>
+    <h4>select the table below to choose a row to edit</h4>
+    <form name="selectEditForm" id="selectEditForm">
+      <select name="tableEditSelect" id="tableEditSelect" onchange="buildEditIDSelector(this.value)">
+        <option>people</option>
+        <option>locations</option>
+        <option>exercises</option>
+        <option>foodItems</option>
+        <option>exerciseLogRecords</option>
+        <option>foodLogRecords</option>
+        <option>favoritePeopleFoodItems</option>
+        <option>favoritePeopleExercises</option>
+      </select>
+      <label for="editIDSelector">id
+        <select name="editIDSelector" id="editIDSelector">
+        </select>
+      </label>
+      <a href='javascript: buildEditForm(this.tableEditSelect.value, this.editIDSelector.value)' id="editFormLink">show element</a>
+    </form>
+    <form name="editForm" id="editForm">
+      
+    </div>
+    <ul id="editMessages"></ul>
   </section>
   
-  <section id="showStuff">
+  <section id="viewStuff">
+    <h2>view and remove stuff</h2>
     <section id="people">
       <table>
         <caption>
-          <h2>people</h2>
+          <h3>people</h3>
         </caption>
         <thead>
           <tr>
@@ -67,7 +99,7 @@
     <section id="locations">
       <table>
         <caption>
-          <h2>locations</h2>
+          <h3>locations</h3>
         </caption>
         <thead>
           <tr>
@@ -82,6 +114,7 @@
             <th>Postal Code</th>
             <th>State</th>
             <th>Creator ID</th>
+            <th>Remove</th>
           </tr>
         </thead>
         <tbody id="locationstbody">
@@ -96,7 +129,7 @@
     <section id="exercises">
       <table>
         <caption>
-          <h2>exercises</h2>
+          <h3>exercises</h3>
         </caption>
         <thead>
           <tr>
@@ -106,6 +139,7 @@
             <th>MuscleGroup</th>
             <th>Category</th>
             <th>Creator ID</th>
+            <th>Remove</th>
           </tr>
         </thead>
         <tbody id="exercisestbody">
@@ -119,7 +153,7 @@
     <section id="foodItems">
       <table>
         <caption>
-          <h2>foodItems</h2>
+          <h3>foodItems</h3>
         </caption>
         <thead>
           <tr>
@@ -134,6 +168,7 @@
             <th>Calorie</th>
             <th>Unit</th>
             <th>Creator ID</th>
+            <th>Remove</th>
           </tr>
         </thead>
         <tbody id="foodItemstbody">
@@ -147,10 +182,11 @@
     <section id="exerciseLogRecords">
       <table>
         <caption>
-          <h2>exerciseLogRecords</h2>
+          <h3>exerciseLogRecords</h3>
         </caption>
         <thead>
           <tr>
+            <th>ID</th>
             <th>Person ID</th>
             <th>Exercise ID</th>
             <th>Location ID</th>
@@ -162,6 +198,7 @@
             <th>Repetitions</th>
             <th>Weight</th>
             <th>Notes</th>
+            <th>Remove</th>
           </tr>
         </thead>
         <tbody id="exerciseLogRecordstbody">
@@ -175,10 +212,11 @@
     <section id="foodLogRecords">
       <table>
         <caption>
-          <h2>foodLogRecords</h2>
+          <h3>foodLogRecords</h3>
         </caption>
         <thead>
           <tr>
+            <th>ID</th>
             <th>Person ID</th>
             <th>Food ID</th>
             <th>Location ID</th>
@@ -186,6 +224,7 @@
             <th>Date/Time Submitted</th>
             <th>Quantity</th>
             <th>Notes</th>
+            <th>Remove</th>
           </tr>
         </thead>
         <tbody id="foodLogRecordstbody">
@@ -199,12 +238,14 @@
     <section id="favoritePeopleExercises">
       <table>
         <caption>
-          <h2>favoritePeopleExercises</h2>
+          <h3>favoritePeopleExercises</h3>
         </caption>
         <thead>
           <tr>
+            <th>ID</th>
             <th>Person ID</th>
             <th>Exercise ID</th>
+            <th>Remove</th>
           </tr>
         </thead>
         <tbody id="favoritePeopleExercisestbody">
@@ -218,12 +259,14 @@
     <section id="favoritePeopleFoodItems">
       <table>
         <caption>
-          <h2>favoritePeopleFoodItems</h2>
+          <h3>favoritePeopleFoodItems</h3>
         </caption>
         <thead>
           <tr>
+            <th>ID</th>
             <th>Person ID</th>
             <th>Food ID</th>
+            <th>Remove</th>
           </tr>
         </thead>
         <tbody id="favoritePeopleFoodItemstbody">

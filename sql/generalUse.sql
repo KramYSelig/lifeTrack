@@ -43,3 +43,11 @@ EX 2: Select everything from the people table with their favorites listed:
  * people table. These are pretty self explanatory and would be redundant to
  * list all possibilities, but below there are a few examples.
  *****************************************************************************/
+
+
+/*****************************************************************************
+ * SELECT [data] FROM [tableName]
+ * This section covers queries used to select various elements of data from the
+ * people table. These are pretty self explanatory and would be redundant to
+ * list all possibilities, but below there are a few examples.
+ *****************************************************************************/

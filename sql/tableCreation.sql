@@ -15,16 +15,16 @@
  * times during testing. It is imperative that they remain commented out if you
  * are using this code in production.
  *****************************************************************************/
-/*
-DROP TABLE IF EXISTS favoritePeopleFoodItems,
-                     favoritePeopleExercises,
-                     exerciseLogRecords,
-                     foodLogRecords,
-                     locations,
-                     exercises,
-                     foodItems,
-                     people;
-*/
+
+DROP TABLE IF EXISTS favoritePeopleFoodItems;
+DROP TABLE IF EXISTS favoritePeopleExercises;
+DROP TABLE IF EXISTS exerciseLogRecords;
+DROP TABLE IF EXISTS foodLogRecords;
+DROP TABLE IF EXISTS locations;
+DROP TABLE IF EXISTS exercises;
+DROP TABLE IF EXISTS foodItems;
+DROP TABLE IF EXISTS people;
+
 /******************************************************************************
  * CREATE TABLE people
  * This table contains information for users of the exercise tracker. The
@@ -41,7 +41,7 @@ CREATE TABLE people (
   age               INT(11),
   weight            INT(11),
   PRIMARY KEY (id),
-  UNIQUE (username, password),
+  UNIQUE (username),
   UNIQUE (email)
 ) ENGINE=InnoDB;
 
@@ -63,7 +63,8 @@ CREATE TABLE foodItems (
   unit              VARCHAR(255),
   creatorID         INT(11) NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (creatorID) REFERENCES people (ID)
+  FOREIGN KEY (creatorID) REFERENCES people (ID),
+  UNIQUE (name)
 ) ENGINE=InnoDB;
 
 /******************************************************************************
@@ -85,7 +86,8 @@ CREATE TABLE locations (
   state             VARCHAR(25),
   creatorID         INT(11) NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (creatorID) REFERENCES people (id)
+  FOREIGN KEY (creatorID) REFERENCES people (id),
+  UNIQUE (name)
 ) ENGINE=InnoDB;
 
 /******************************************************************************
@@ -101,7 +103,8 @@ CREATE TABLE exercises (
   category          VARCHAR(50) NOT NULL,
   creatorID         INT(11) NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (creatorID) REFERENCES people (id)
+  FOREIGN KEY (creatorID) REFERENCES people (id),
+  UNIQUE (name)
 ) ENGINE=InnoDB;
 
 /******************************************************************************
@@ -109,6 +112,7 @@ CREATE TABLE exercises (
  * Records an instance of exercise for a user.
  *****************************************************************************/
 CREATE TABLE exerciseLogRecords (
+  id                INT(11) NOT NULL AUTO_INCREMENT,
   personID          INT(11) NOT NULL,
   exerciseID        INT(11) NOT NULL,
   locationID        INT(11) NOT NULL,
@@ -123,7 +127,8 @@ CREATE TABLE exerciseLogRecords (
   PRIMARY KEY (personID, exerciseID, locationID, dateTimePerformed),
   FOREIGN KEY (personID) REFERENCES people (id),
   FOREIGN KEY (exerciseID) REFERENCES exercises (id),
-  FOREIGN KEY (locationID) REFERENCES locations (id)
+  FOREIGN KEY (locationID) REFERENCES locations (id),
+  UNIQUE (id)
 ) ENGINE=InnoDB;
 
 /******************************************************************************
@@ -131,11 +136,13 @@ CREATE TABLE exerciseLogRecords (
  * Relationship table that tracks users' favorite exercises.
  *****************************************************************************/
 CREATE TABLE favoritePeopleExercises (
+  id                INT(11) NOT NULL AUTO_INCREMENT,
   personID          INT(11) NOT NULL,
   exerciseID        INT(11) NOT NULL,
   PRIMARY KEY (personID, exerciseID),
   FOREIGN KEY (personID) REFERENCES people (id),
-  FOREIGN KEY (exerciseID) REFERENCES foodItems (id)
+  FOREIGN KEY (exerciseID) REFERENCES exercises (id),
+  UNIQUE (id)
 ) ENGINE=InnoDB;
 
 /******************************************************************************
@@ -143,6 +150,7 @@ CREATE TABLE favoritePeopleExercises (
  * Records an instance of eating for a user.
  *****************************************************************************/
 CREATE TABLE foodLogRecords (
+  id                INT(11) NOT NULL AUTO_INCREMENT,
   personID          INT(11) NOT NULL,
   foodID            INT(11) NOT NULL,
   locationID        INT(11) NOT NULL,
@@ -150,10 +158,11 @@ CREATE TABLE foodLogRecords (
   dateTimeSubmitted DATETIME NOT NULL,
   quantity          INT(11) NOT NULL,
   notes             TEXT(500),
-  PRIMARY KEY (personID, foodID, locationID, dateTimeEaten),
+  PRIMARY KEY (personID, foodID, locationID, dateTimeConsumed),
   FOREIGN KEY (personID) REFERENCES people (id),
   FOREIGN KEY (foodID) REFERENCES foodItems (id),
-  FOREIGN KEY (locationID) REFERENCES locations (id)
+  FOREIGN KEY (locationID) REFERENCES locations (id),
+  UNIQUE (id)
 ) ENGINE=InnoDB;
 
 /******************************************************************************
@@ -161,9 +170,11 @@ CREATE TABLE foodLogRecords (
  * Relationship table that tracks users' favorite food items.
  *****************************************************************************/
 CREATE TABLE favoritePeopleFoodItems (
+  id                INT(11) NOT NULL AUTO_INCREMENT,
   personID          INT(11) NOT NULL,
   foodID            INT(11) NOT NULL,
   PRIMARY KEY (personID, foodID),
   FOREIGN KEY (personID) REFERENCES people (id),
-  FOREIGN KEY (foodID) REFERENCES foodItems (id)
+  FOREIGN KEY (foodID) REFERENCES foodItems (id),
+  UNIQUE (id)
 ) ENGINE=InnoDB;
