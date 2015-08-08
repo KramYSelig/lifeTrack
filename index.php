@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="css/main.css">
   
 </head>
-<html>
 <body>
   <header>
     <div id="logo">
@@ -27,16 +26,19 @@
     <h2>add stuff</h2>
     <h4>which table?</h4>
     
-    <select name="selectForm" id="selectForm" onchange="buildAddForm(this.value)">
-      <option>people</option>
-      <option>locations</option>
-      <option>exercises</option>
-      <option>foodItems</option>
-      <option>exerciseLogRecords</option>
-      <option>foodLogRecords</option>
-      <option>favoritePeopleFoodItems</option>
-      <option>favoritePeopleExercises</option>
-    </select>
+    <form name="addPeopleForm" id="addPeopleForm">
+      <select name="selectForm" id="selectForm" onchange="clearForms(), clearMessages()">
+        <option>people</option>
+        <option>locations</option>
+        <option>exercises</option>
+        <option>foodItems</option>
+        <option>exerciseLogRecords</option>
+        <option>foodLogRecords</option>
+        <option>favoritePeopleFoodItems</option>
+        <option>favoritePeopleExercises</option>
+      </select>
+      <button type="button" onclick='clearForms(), buildAddForm(selectForm.value)' id="editFormLink">create add form</button>
+    </form>
     <div name="addForm" id="addForm">
     </div>
     <ul id="addMessages">
@@ -47,7 +49,7 @@
     <h2>edit stuff</h2>
     <h4>select the table below to choose a row to edit</h4>
     <form name="selectEditForm" id="selectEditForm">
-      <select name="tableEditSelect" id="tableEditSelect" onchange="buildEditIDSelector(this.value)">
+      <select name="tableEditSelect" id="tableEditSelect" onchange="buildEditIDSelector(this.value), clearForms(), clearMessages()">
         <option>people</option>
         <option>locations</option>
         <option>exercises</option>
@@ -58,10 +60,10 @@
         <option>favoritePeopleExercises</option>
       </select>
       <label for="editIDSelector">id
-        <select name="editIDSelector" id="editIDSelector">
+        <select name="editIDSelector" id="editIDSelector" onchange="clearForms()">
         </select>
       </label>
-      <a href='javascript: buildEditForm(this.tableEditSelect.value, this.editIDSelector.value)' id="editFormLink">show element</a>
+      <button type="button" onclick='clearForms(), buildEditForm(tableEditSelect.value, editIDSelector.value)' id="editFormLink">show element</button>
     </form>
     <form name="editForm" id="editForm">
       
@@ -73,6 +75,8 @@
   
   <section id="viewStuff">
     <h2>view and remove stuff</h2>
+    <ul id="removeMessages">
+    </ul>
     <section id="people">
       <table>
         <caption>

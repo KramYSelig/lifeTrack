@@ -138,7 +138,7 @@ function getRecord($table, $id) {
     $stmt->close();
   }
   else if ($table == 'foodItems') {
-    if (!$stmt->execute()) {
+    /*if (!$stmt->execute()) {
       echo "Execute failed: (" . $mysqli->errno . ") " . $mysqli->error;
     }
     if (!$stmt->bind_result($id,
@@ -181,10 +181,10 @@ function getRecord($table, $id) {
       echo '<label for="creatorID">creatorID<input type="text" id="creatorID" value="' . $creatorID . '"></label>';
     }
 
-    $stmt->close();
+    $stmt->close();*/
   }
   else if ($table == 'foodLogRecords') {
-    if (!$stmt->execute()) {
+    /*if (!$stmt->execute()) {
       echo "Execute failed: (" . $mysqli->errno . ") " . $mysqli->error;
     }
     if (!$stmt->bind_result($id,
@@ -221,7 +221,7 @@ function getRecord($table, $id) {
       echo '<label for="creatorID">creatorID<input type="text" id="creatorID" value="' . $creatorID . '"></label>';
     }
 
-    $stmt->close();
+    $stmt->close();*/
   }
   else if ($table == 'exerciseLogRecords') {
     
@@ -760,7 +760,6 @@ function load($table) {
       echo '<td>' . $id . '</td>';
       echo '<td>' . $personID . '</td>';
       echo '<td>' . $foodID . '</td>';
-      echo '<td><a href=';
       echo '<td><a href="javascript: remove(' . "'" . $table . "'" . ', ' . $id . ')">Delete Row</a></td>';
       echo '</tr>';
     }

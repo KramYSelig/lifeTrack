@@ -6,8 +6,15 @@
 function add(form) {
   var req = new XMLHttpRequest(),
     reqParam,
-    url = 'PHPdbFiles/db.php';
+    url = 'PHPdbFiles/db.php',
+    addErrorMessage,
+    addSuccMessage,
+    errorLi = document.createElement('li');
   
+  addErrorMessage = "Add failed, please ensure required fields are completed ";
+  addErrorMessage += "and that you are not attempting to enter duplicate ";
+  addErrorMessage += "information for fields that require unique values.";
+  addSuccMessage = "Add succeeded!";
   reqParam = 'action=' + form.action.value;
   reqParam += '&table=' + form.table.value;
   
@@ -76,11 +83,20 @@ function add(form) {
   req.onreadystatechange = function () {
     if (this.readyState === 4)
     {
-      loadTables();
+      if (this.responseText !== "") {
+        document.getElementById('addMessages').innerHTML = "";
+        errorLi.appendChild(document.createTextNode(addErrorMessage));
+        document.getElementById('addMessages').appendChild(errorLi);
+      }
+      else {
+        document.getElementById('addMessages').innerHTML = "";
+        errorLi.appendChild(document.createTextNode(addSuccMessage));
+        document.getElementById('addMessages').appendChild(errorLi);
+        loadTables();
+      }
     }
   };
   
-  console.log(reqParam);
   req.open('POST', url, true);
   req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   req.send(reqParam);
@@ -119,8 +135,20 @@ function load(table) {
 function remove(table, id) {
   var req = new XMLHttpRequest(),
     reqParam,
-    url = 'PHPdbFiles/db.php';
-
+    url = 'PHPdbFiles/db.php',
+    removeFail,
+    removeSucc,
+    errorLi = document.createElement('li');
+  
+  clearMessages();
+  clearAddForm();
+  clearEditForm();
+  document.getElementById('removeMessages').innerHTML = "";
+  removeFail = "Remove failed. Please ensure the item you are trying ";
+  removeFail += "to remove is not referenced by another table. If it is, ";
+  removeFail += "you will need to remove it from that table first.";
+  removeSucc = "Remove succeeded!";
+  
   reqParam = 'action=remove';
   reqParam += '&table=' + table;
   reqParam += '&id=' + id;
@@ -128,7 +156,15 @@ function remove(table, id) {
   req.onreadystatechange = function () {
     if (this.readyState === 4) 
     {
-      loadTables();
+      if (this.responseText !== "") {
+        errorLi.appendChild(document.createTextNode(removeFail));
+        document.getElementById('removeMessages').appendChild(errorLi);
+      }
+      else {
+        errorLi.appendChild(document.createTextNode(removeSucc));
+        document.getElementById('removeMessages').appendChild(errorLi);
+        loadTables();
+      }
     }
   };
   
@@ -163,8 +199,6 @@ function getValues(table, field, idName, errorMessagesID) {
   req.onreadystatechange = function () {
     if (this.readyState === 4) 
     {
-      console.log(idName);
-      console.log(errorMessagesID);
       if (this.responseText.substring(0, 5) === 'ERROR') {
         document.getElementById(idName).innerHTML = "";
         errorLi.appendChild(document.createTextNode(this.responseText));
@@ -206,25 +240,65 @@ function buildEditForm(table, id) {
   var req = new XMLHttpRequest(),
     reqParam,
     url = 'PHPdbFiles/db.php';
+  
+  clearMessages();
+  
+  if (id !== "") {
+    reqParam = 'action=getRecord';
+    reqParam += '&table=' + table;
+    reqParam += '&id=' + id;
 
-  reqParam = 'action=getRecord';
-  reqParam += '&table=' + table;
-  reqParam += '&id=' + id;
+    req.onreadystatechange = function () {
+      if (this.readyState === 4) 
+      {
+        document.getElementById('editForm').innerHTML = this.responseText;
+      }
+    };
 
-  req.onreadystatechange = function () {
-    if (this.readyState === 4) 
-    {
-      document.getElementById('editForm').innerHTML = this.responseText;
-    }
-  };
-
-  req.open('POST', url, true);
-  req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  req.send(reqParam);
+    req.open('POST', url, true);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.send(reqParam);
+  }
+}
+/******************************************************************************
+ * Function Name: clearMessages()
+ *
+ *
+ *****************************************************************************/
+function clearMessages() {
+  document.getElementById('removeMessages').innerHTML = "";
+  document.getElementById('editMessages').innerHTML = "";
+  document.getElementById('addMessages').innerHTML = "";
 }
 
+/******************************************************************************
+ * Function Name: clearAddForm()
+ *
+ *
+ *****************************************************************************/
+function clearAddForm() {
+  document.getElementById('addForm').innerHTML = "";
+}
 
+/******************************************************************************
+ * Function Name: clearEditForm()
+ *
+ *
+ *****************************************************************************/
+function clearEditForm() {
+  document.getElementById('editForm').innerHTML = "";
+}
 
+/******************************************************************************
+ * Function Name: clearEditForm()
+ *
+ *
+ *****************************************************************************/
+
+function clearForms() {
+  clearEditForm();
+  clearAddForm();
+}
 /******************************************************************************
  * Function Name: buildAddForm(formName)
  *
@@ -232,9 +306,7 @@ function buildEditForm(table, id) {
  *****************************************************************************/
 function buildAddForm(formName) {
   var formString = "<form>";
-
-  document.getElementById('addMessages').innerHTML = "";
-  
+  clearMessages();
   if (formName === 'people') {
     formString += "<label for='username'>Username<input type='text' id='username' name='username'></label>";
     formString += "<label for='password'>Password<input type='password' id='password' name='password'></label>";
@@ -310,7 +382,7 @@ function buildAddForm(formName) {
   }
   formString += "<input type='hidden' id='table' name='table' value='" + formName + "'>";
   formString += "<input type='hidden' id='action' name='action' value='add'>";
-  formString += "<a href='javascript: add(this)' id='addFormLink'>add to " + formName + "</a>";
+  formString += "<button type='button' onclick='add(this.form)' id='addFormLink'>add to " + formName + "</button>";
   formString += "</form>";
 
   document.getElementById('addForm').innerHTML = formString;
@@ -325,9 +397,10 @@ function loadTables() {
   load('foodLogRecords');
   load('favoritePeopleExercises');
   load('favoritePeopleFoodItems');
-  buildAddForm('people');
+
   buildEditIDSelector('people');
-  document.getElementById('tableEditSelect').value = 'people';
+  clearAddForm();
+  clearEditForm();
 }
 
 window.onload = loadTables();
